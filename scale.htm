@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Scale app by Birupaksha</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet">
+  <style>
+    td{
+      width: 50px;
+      border: 1px solid grey;
+      padding: 5px;
+      text-align: center;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="row" style="max-width: 400px; margin: 0 auto;">
+      <div class="col-12">
+        <h2>Major Minor scale finder</h2>
+
+        <form class="form" method="POST">
+          <div id="input"></div>
+          <div class="text-center">
+            <input type="submit" class="btn btn-success" id="scale_submit" value="Find notes">
+          </div>
+        </form>
+
+        <h4>Notes:</h4>
+        <table>
+          <tr id="scale_notes"></tr>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    let scales = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B']
+    display_input=()=>{
+      let code = '';
+      code += `<select class="form-control mb-2" id="base_note_input" name="base_note_input">`;
+      for(var i=0; i<7; i++){
+        code += `<option value="`+scales[i]+`">`+scales[i]+`</option>`;
+      }
+      code += `</select>`;
+
+      code += `<select class="form-control mb-2" id="scale_type_input" name="scale_type_input">`;
+      code += `<option value="Major">Major</option>`;
+      code += `<option value="Minor">Minor</option>`;
+      code += `</select>`;
+      return code;
+    }
+
+    function find_scale_notes(scale, scale_type){
+      if(scale_type == "Major"){
+        var note_progress = [0, 2, 2, 1, 2, 2, 2];
+      }else if(scale_type == "Minor"){
+        var note_progress = [0, 2, 1, 2, 2, 1, 2];
+      }
+      let notes = ['C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B', 'C', 'C#', 'D', 'D#', 'E', 'F', 'F#', 'G', 'G#', 'A', 'A#', 'B'];
+      
+      let progress_index = [];
+      let scale_note_index = [];
+      let this_note_index = notes.indexOf(scale);
+      let this_note = [];
+
+      var this_progress_index = '';
+      var increment = '';
+
+      for(var i=0; i<7; i++){
+        this_progress_index = i;
+        increment = note_progress[this_progress_index];
+        this_note_index = this_note_index + increment;
+
+        this_note[i] = notes[this_note_index];
+      }
+
+      let code = '';
+      for(var i=0; i<7; i++){
+        code += `<td>`;
+        code += this_note[i];
+        code += `</td>`;
+      }
+      return code;
+    }
+
+    let inputs = document.getElementById('input');
+    inputs.innerHTML = display_input();
+
+    document.getElementById("scale_submit").addEventListener("click", function(event){
+      event.preventDefault();
+
+      let scale = document.getElementById('base_note_input').value;
+      let scale_type = document.getElementById("scale_type_input").value;
+
+      document.getElementById('scale_notes').innerHTML = find_scale_notes(scale, scale_type);
+    });
+  </script>
+</body>
+</html>
